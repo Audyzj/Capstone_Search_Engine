@@ -12,8 +12,8 @@ class Token {
   int begin_;         // Begin offset.
   int end_;           // End offset.
 };
-例子：
 
+例子：
 He is working in beijing.
 转化为Token序列：
 <he:0,2> <be:3,5> <work:6,13> <in:14,15> <beijing:16,23>
@@ -79,6 +79,7 @@ Token的定义
 输出：
 
 <she:3,6> <work:7,13> <in:14,16> <a130:17,21> <and:22,25> <b:26,27> <8:28,29>
+
 考点
 
 程序设计中的封装理念。
