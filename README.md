@@ -6,13 +6,6 @@ Part 1
 
 Token是最小的有意义的语言单位。在作业中被定义为：
 
-
-
-1
-2
-3
-4
-5
 class Token {
   std::string term_;  // The normalized form.
   int begin_;         // Begin offset.
@@ -20,15 +13,8 @@ class Token {
 };
 例子：
 
-
-
-1
 He is working in beijing.
 转化为Token序列：
-
-
-
-1
 <he:0,2> <be:3,5> <work:6,13> <in:14,15> <beijing:16,23>
 （实际输出可能会和这个不一样，因为标准化过程的实现不唯一）
 
@@ -50,23 +36,6 @@ Term是每个Token的标准化形式，它包括：
 
 本次作业要求把std::istream封装成TextTokenStream，实现Token流的读入。TextTokenStream继承了TokenStream。同学们需要实现所有从TokenStream继承下来的函数。
 
-
-
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
 class TokenStream {
  public:
   virtual ~TokenStream() = default;  // Judges whether it has next token.
@@ -80,6 +49,7 @@ class TokenStream {
   // Normalizes str.
   virtual void Normalize(std::string* str) const;
 };
+
 那么，为什么要以TokenStream的形式读入Token？原因有如下几个：
 
 如果我们把std::istream封装成TokenStream，就可以像读入字符一样读入Token了。
@@ -89,14 +59,6 @@ TokenStream是一种适配器模式的设计模式，对于搜索引擎的索引
 
 实现文本的Token流，TextTokenStream，使之能以如下形式从std::istream中读入Token：
 
-
-
-1
-2
-3
-4
-5
-6
 search::TokenStream* token_stream = analyzer.NewTextTokenStream(&std::cin);
 while (token_stream->HasNext()) {
   search::Token token = token_stream->Next();
@@ -112,17 +74,9 @@ Token的定义
 输入输出样例
 
 输入：
-
-
-
-1
-2
 -- She worked in A130 and B-8.
 输出：
 
-
-
-1
 <she:3,6> <work:7,13> <in:14,16> <a130:17,21> <and:22,25> <b:26,27> <8:28,29>
 考点
 
