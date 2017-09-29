@@ -1,6 +1,6 @@
 # Capstone_Search_Engine_搜索引擎设计
 
-#Part 1
+# Part 1
 
 什么是Token
 
@@ -105,7 +105,7 @@ Tips
 运用valgrind对程序进行内存检查。
 
 
-#Part 2
+# Part 2
 
 文档编号化
 
