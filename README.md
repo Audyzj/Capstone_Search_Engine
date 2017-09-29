@@ -1,7 +1,6 @@
-# Capstone_Search_Engine
-# 搜索引擎设计
+# Capstone_Search_Engine_搜索引擎设计
 
-Part 1
+#Part 1
 
 什么是Token
 
@@ -85,6 +84,96 @@ Token的定义
 程序设计中的封装理念。
 对C++输入流和字符串的操作。
 对适配器模式的掌握。
+如何完成作业
+
+需要安装g++4.8以上版本和make程序。
+强烈推荐在Linux系统下完成作业。
+从作业网站中下载作业压缩包ex1.tar.gz。
+解压后，找到所有包含TODO的地方，并进行实现。
+通过make进行编译，并运行ex_main进行本地测试。
+把修改后的代码打包上传到作业网站上。
+评测方法
+
+我们设计了多组测试，每通过一个大组的测试就会得到一定的分数，总分100分。
+
+Tips
+
+注意类的继承关系。
+注意作业代码中已有的注释说明。特别是对指针Ownership的说明。
+如果调用了New××××的函数，要记得通过某种方式析构。
+参考ex_main.cc中对作业代码的调用方法。
+运用valgrind对程序进行内存检查。
+
+
+#Part 2
+
+文档编号化
+
+在搜索引擎中，每一个文档都被表示为一个系统赋予的编号。
+
+编号	文档
+0	第一个文档
+1	第二个文档
+……	……
+N-1	第N个文档
+于是我们需要在外存储上构建上述映射表的数据结构，使得我们可以很方便地检索到第i个文档的内容。
+
+然而，我们面对的一个主要问题是：上表中每个记录不是定长的。
+
+文档索引在外存储上的结构
+
+所以，我们打算通过两个文件来解决记录不定长的问题。
+
+存储文件Storage：顺序存储每个文档的内容
+第一个文档	第二个文档	……	第N个文档
+2. 存储索引文件StorageIndex：顺序存储每个文档在Storage中的偏移量。
+
+第一个文档的在Storage中的偏移量
+第二个文档的在Storage中的偏移量
+……
+第N-1个文档在Storage中的偏移量
+这样，StorageIndex中的每个记录都是定长记录，进而就可以随机定位到某个文档的偏移量。
+
+文档的写入和读取
+
+我们把这部分模块称为Storage。
+
+search::util::MemIO mem_io;
+search::StorageWriter writer(&mem_io);
+for (const std::string& item : data) {
+  writer.AddStorage(item);
+}
+writer.Close();
+search::StorageReader reader(&mem_io);
+for (int i = 0; i < reader.num_docs(); ++i) {
+  LOG(INFO) << "data[" << i << "]: " << reader.Stored(i);
+}
+通过调用StorageWriter::AddStorage对每个文档进行顺序写入，写入的时候该函数会对所加入文档顺序进行编号（从0开始）；
+
+读取的时候，通过StorageReader::Stored以编号为参数读取。
+
+作业目标
+
+实现前文所提到的Storage模块。该作业需要操作两个文件来在外存储上构建这个Storage索引结构：StorageIndex和Storage。
+
+上述两个文件要求通过调用util::IO的如下几个函数进行打开和关闭：
+
+
+virtual std::istream* NewStorageIndexIn() const = 0;
+virtual void CloseAndDeleteStorageIndexIn(std::istream* in) const = 0;
+virtual std::ostream* NewStorageIndexOut() const = 0;
+virtual void CloseAndDeleteStorageIndexOut(std::ostream* out) = 0;
+virtual std::istream* NewStorageIn() const = 0;
+virtual void CloseAndDeleteStorageIn(std::istream* in) const = 0;
+virtual std::ostream* NewStorageOut() const = 0;
+virtual void CloseAndDeleteStorageOut(std::ostream* out) = 0;
+另外，本次作业只规定了两文件存储的大致方案，而具体的存储细节这里不作规定，同学们可以自由发挥。
+
+考点
+
+程序设计中的封装理念。
+对流的读写操作。
+对C++中字符串的灵活运用。
 如何完成作业
 
 需要安装g++4.8以上版本和make程序。
